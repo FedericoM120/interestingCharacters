@@ -40,6 +40,20 @@ public class PatternFinder {
         }
     }
 
+    private static void arithmeticStringOfMinus1Miner(String mine, int length) throws arithmeticStringOfMinus1Miner {
+        for (int start = 0; start < mine.length() - length; start++) {
+            int i;
+            for (i = start + 1; i < start + length; i++){
+                if (mine.charAt(i) - mine.charAt(i - 1) != - 1) {
+                    break;
+                }
+            }
+            if (i == start + length){
+                throw new arithmeticStringOfMinus1Miner(mine.substring(start, start + length), start);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         //Step 1: handling input...
@@ -60,6 +74,13 @@ public class PatternFinder {
         //Step 2: generating random string...
         String randomString = randomStringGenerator(randomStringLength);
         //Step 3: finding the interesting patterns
+        try {
+            for (int length = patternMaxLength; length > 0; length--) {
+                arithmeticStringOfMinus1Miner(randomString, length);
+            }
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+        }
         try {
             for (int length = patternMaxLength; length > 0; length--) {
                 arithmeticStringOfOrder1Miner(randomString, length);
