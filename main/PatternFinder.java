@@ -25,25 +25,30 @@ public class PatternFinder {
                 	throw new SingletonException(mine.substring(start, start + length), start);
         }
     }
-   /* private static void arithmeticStringOfOne(String mine, int length) {
-        for (int start = 0; start < mine.length() - length; start++) {
-            for (int i = start + 1; i < length; i++){
-                if (mine.charAt(i) > mine.charAt(i - 1)) {
 
+    private static void arithmeticStringOfOrder1Miner(String mine, int length) throws ArithmeticOrder1Exception {
+        for (int start = 0; start < mine.length() - length; start++) {
+            int i;
+            for (i = start + 1; i < start + length; i++){
+                if (mine.charAt(i) - mine.charAt(i - 1) != 1) {
+                    break;
                 }
             }
+            if (i == start + length){
+                throw new ArithmeticOrder1Exception(mine.substring(start, start + length), start);
+            }
         }
-    }*/
+    }
 
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         //Step 1: handling input...
-        //System.out.println("Enter the length of random string: ");
-        //int patternMaxLength = 10;//you need to update this part so that the value is given by the user via keyboard!
+        System.out.println("Enter the length of random string: ");
+        int patternMaxLength = 10;//you need to update this part so that the value is given by the user via keyboard!
         int randomStringLength = keyboard.nextInt();
         while (true) {
             try {
-                if (randomStringLength < 2 || randomStringLength > 9)
+                if (randomStringLength < 100000 || randomStringLength > 1000000000)
                     throw new NumberFormatException();
             } catch (NumberFormatException e) {
                 System.out.println("Try again!");
@@ -53,11 +58,18 @@ public class PatternFinder {
             break;
         }
         //Step 2: generating random string...
-        //String randomString = randomStringGenerator(randomStringLength);
+        String randomString = randomStringGenerator(randomStringLength);
         //Step 3: finding the interesting patterns
         try {
-            for (int length = 4; length > 0; length--)
-                singletonMiner("uwwwi", length);
+            for (int length = patternMaxLength; length > 0; length--) {
+                arithmeticStringOfOrder1Miner(randomString, length);
+            }
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+        }
+        try {
+            for (int length = patternMaxLength; length > 0; length--)
+                singletonMiner(randomString, length);
         } catch (Exception exp) {
             System.out.println(exp.getMessage());
         }
