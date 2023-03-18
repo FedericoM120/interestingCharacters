@@ -54,6 +54,23 @@ public class PatternFinder {
         }
     }
 
+    private static void balancedBipartiteString (String mine, int length) throws balancedBipartiteStringException{
+        for (int start = 0; start < mine.length() - length; start++) {
+            int i;
+            int halfLength = mine.length() /2;
+            String firstHalf = mine.substring(0, halfLength);
+            String secondHalf = mine.substring(halfLength);
+            for (i = start; i < start + halfLength && i < start + length; i++) {
+                if (firstHalf.charAt(i) != secondHalf.charAt(i)) {
+                    break;
+                }
+            }
+            if (i == start + length){
+                throw new balancedBipartiteStringException(mine.substring(start, start + length), start);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         //Step 1: handling input...
@@ -74,6 +91,13 @@ public class PatternFinder {
         //Step 2: generating random string...
         String randomString = randomStringGenerator(randomStringLength);
         //Step 3: finding the interesting patterns
+        try {
+            for (int length = patternMaxLength; length > 0; length--) {
+                balancedBipartiteString(randomString, length);
+            }
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+        }
         try {
             for (int length = patternMaxLength; length > 0; length--) {
                 arithmeticStringOfMinus1Miner(randomString, length);
