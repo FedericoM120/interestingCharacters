@@ -69,6 +69,36 @@ public class PatternFinder {
         }
     }
 
+    private static void balancedTripartiteString (String mine, int length) throws balancedTripartiteException{
+        if (length % 3 != 0) {
+            // Length is not divisible by 3, skip and move on to the next length
+            return;
+        }
+        int partLength = length / 3;
+        for (int start = 0; start <= mine.length() - length; start++) {
+            String firstPart = mine.substring(start, start + partLength);
+            String secondPart = mine.substring(start + partLength, start + 2 * partLength);
+            String thirdPart = mine.substring(start + 2 * partLength, start + length);
+            if (firstPart.equals(secondPart) && secondPart.equals(thirdPart)) {
+                throw new balancedTripartiteException(mine.substring(start, start + length), start);
+            }
+        }
+    }
+
+    private static void palindrome(String mine, int length) throws PalindromeException { // aaaaaaaa
+        for (int start = 0; start <= mine.length() - length; start++) {
+            int i;
+            for (i = 0; i < length / 2; i++) {
+                if (mine.charAt(start + i) != mine.charAt(start + length - i - 1)) {
+                    break;
+                }
+            }
+            if (i == length / 2) {
+                throw new PalindromeException(mine.substring(start, start + length), start);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         //Step 1: handling input...
@@ -89,6 +119,20 @@ public class PatternFinder {
         //Step 2: generating random string...
         String randomString = randomStringGenerator(randomStringLength);
         //Step 3: finding the interesting patterns
+        try {
+            for (int length = patternMaxLength; length > 0; length--) {
+                palindrome(randomString, length);
+            }
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+        }
+        try {
+            for (int length = patternMaxLength; length > 0; length--) {
+                balancedTripartiteString(randomString, length);
+            }
+        } catch (Exception exp) {
+            System.out.println(exp.getMessage());
+        }
         try {
             for (int length = patternMaxLength; length > 0; length--) {
                 balancedBipartiteString(randomString, length);
