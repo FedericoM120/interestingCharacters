@@ -15,7 +15,7 @@ public class PatternFinder {
     }
 
     //need to create similar patterns for each 6 methods
-    private static void singletonMiner(String mine, int length) throws SingletonException {
+    private static void singletonMiner(String mine, int length) throws SingletonException { // aaaaaaaa
         for (int start = 0; start < mine.length() - length; start++) {
             int i;
             for (i = start + 1; i < start + length; i++)
@@ -55,17 +55,15 @@ public class PatternFinder {
     }
 
     private static void balancedBipartiteString (String mine, int length) throws balancedBipartiteStringException{
-        for (int start = 0; start < mine.length() - length; start++) {
-            int i;
-            int halfLength = mine.length() /2;
-            String firstHalf = mine.substring(0, halfLength);
-            String secondHalf = mine.substring(halfLength);
-            for (i = start; i < start + halfLength && i < start + length; i++) {
-                if (firstHalf.charAt(i) != secondHalf.charAt(i)) {
-                    break;
-                }
-            }
-            if (i == start + length){
+        if (length % 2 != 0) {
+            // Length is odd, skip and move on to the next length
+            return;
+        }
+        int halfLength = length / 2;
+        for (int start = 0; start <= mine.length() - length; start++) {
+            String firstHalf = mine.substring(start, start + halfLength);
+            String secondHalf = mine.substring(start + halfLength, start + length);
+            if (firstHalf.equals(secondHalf)) {
                 throw new balancedBipartiteStringException(mine.substring(start, start + length), start);
             }
         }
