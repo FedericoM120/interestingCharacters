@@ -102,8 +102,22 @@ public class PatternFinder {
     public static void main(String[] args) {
         Scanner keyboard = new Scanner(System.in);
         //Step 1: handling input...
+        System.out.println("Please enter the max pattern length. No larger than 15 or less than 3");
+        int patternMaxLength = keyboard.nextInt();
+        while (true) {
+            try {
+                if (patternMaxLength < 3 || patternMaxLength > 15) {
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException f) {
+                System.out.println("Try again!");
+                patternMaxLength = keyboard.nextInt();
+                continue;
+            }
+            break;
+        }
         System.out.println("Enter the length of random string: ");
-        int patternMaxLength = 10;//you need to update this part so that the value is given by the user via keyboard!
+        //int patternMaxLength = 10;//you need to update this part so that the value is given by the user via keyboard!
         int randomStringLength = keyboard.nextInt();
         while (true) {
             try {
@@ -121,44 +135,15 @@ public class PatternFinder {
         //Step 3: finding the interesting patterns
         try {
             for (int length = patternMaxLength; length > 0; length--) {
+                singletonMiner(randomString, length);
+                arithmeticStringOfOrder1Miner(randomString, length);
+                arithmeticStringOfMinus1Miner(randomString, length);
+                balancedBipartiteString(randomString, length);
+                balancedTripartiteString(randomString, length);
                 palindrome(randomString, length);
             }
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
-        }
-        try {
-            for (int length = patternMaxLength; length > 0; length--) {
-                balancedTripartiteString(randomString, length);
-            }
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
-        }
-        try {
-            for (int length = patternMaxLength; length > 0; length--) {
-                balancedBipartiteString(randomString, length);
-            }
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
-        }
-        try {
-            for (int length = patternMaxLength; length > 0; length--) {
-                arithmeticStringOfMinus1Miner(randomString, length);
-            }
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
-        }
-        try {
-            for (int length = patternMaxLength; length > 0; length--) {
-                arithmeticStringOfOrder1Miner(randomString, length);
-            }
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
-        }
-        try {
-            for (int length = patternMaxLength; length > 0; length--)
-                singletonMiner(randomString, length);
-        } catch (Exception exp) {
-            System.out.println(exp.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 }
